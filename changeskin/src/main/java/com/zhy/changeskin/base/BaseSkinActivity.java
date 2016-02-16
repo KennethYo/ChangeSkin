@@ -141,11 +141,6 @@ public class BaseSkinActivity extends AppCompatActivity implements ISkinChangedL
 
     private View createViewFromTag(Context context, String name, AttributeSet attrs)
     {
-        if (name.equals("view"))
-        {
-            name = attrs.getAttributeValue(null, "class");
-        }
-
         try
         {
             mConstructorArgs[0] = context;
@@ -154,7 +149,12 @@ public class BaseSkinActivity extends AppCompatActivity implements ISkinChangedL
             if (-1 == name.indexOf('.'))
             {
                 // try the android.widget prefix first...
-                return createView(context, name, "android.widget.");
+                String prefix = "android.widget.";
+                if (TextUtils.equals(name, "View"))
+                {
+                    prefix = "android.view.";
+                }
+                return createView(context, name, prefix);
             } else
             {
                 return createView(context, name, null);
